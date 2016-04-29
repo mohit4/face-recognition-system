@@ -91,7 +91,8 @@ def face_recognition(uploaded_img_name):
 	for(x,y,w,h) in faces:
 		print "Working on",uploaded_img_name
 		predicted_no, surity = recognizer.predict(image_numpy[y:y+h,x:x+w])
-		if (100-int(surity) < 30):
+		# here 40% is taken as threshold, below that surity image will be considered unrecognized
+		if (100-int(surity) < 40):
 			print "Unrecognized!"
 			cv2.rectangle(image_numpy, (x, y), (x+w, y+h), (0, 0, 0), 2)
 			cv2.imshow('Unrecognized '+uploaded_img_name, image_numpy)
@@ -132,10 +133,10 @@ Face recognition system accepts following command line arguments
 		face_recognizer -f <filename.ext>
 	
 	2. specifying a complete directory as input :
-		face_recognizer -d <dirname/>
+		face_recognizer -d <dirname>
 	
 	3. Adding a new user details :
-		face_recognizer -a <dirname/>
+		face_recognizer -a <dirname>
 
 	4. View help
 		face_recognizer -h help
@@ -164,7 +165,7 @@ def main():
 			sys.exit(2)
 		files = os.listdir(dirname)
 		for a_file in files:
-			face_recognition(dirname+a_file)
+			face_recognition(dirname+'/'+a_file)
 		cv2.waitKey(0)
 
 	elif(sys.argv[1]=='-f'):
